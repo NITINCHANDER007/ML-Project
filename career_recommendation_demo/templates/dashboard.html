@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ensemble Career AI v4.0 (60-Point Diagnostic)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .quiz-scroll-area { max-height: 500px; overflow-y: auto; padding-right: 15px; border: 1px solid #eee; border-radius: 10px; background: #fafafa; }
+        .q-card { background: white; border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 5px solid #0d6efd; display: flex; justify-content: space-between; align-items: center; }
+        .q-card:nth-child(even) { background: #fdfdfd; }
+        .sticky-header { position: sticky; top: 0; background: white; z-index: 100; padding-bottom: 10px; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 1000px; border-radius: 20px;">
+        <div class="card-body p-5">
+            <div class="sticky-header">
+                <h2 class="fw-bold text-primary">Global Career Diagnostic <span class="badge bg-danger">60-Question Mode</span></h2>
+                <p class="text-muted small">This is a high-resolution professional assessment using the full O*NET RIASEC battery.</p>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6"><input type="number" name="Math_Score" id="math" class="form-control" placeholder="Math Score (0-100)" value="90"></div>
+                    <div class="col-md-6">
+                        <select id="prog" class="form-select"><option value="High">Advanced Coding</option><option value="Medium">Intermediate</option><option value="Low">Beginner</option></select>
+                    </div>
+                </div>
+            </div>
+
+            <form id="ultraForm">
+                <div class="quiz-scroll-area p-3" id="quiz-box">
+                    </div>
+
+                <div class="mt-4">
+                    <label class="fw-bold mb-2">Detailed Career Intent (e.g. "I want to lead a software team building AI for healthcare")</label>
+                    <textarea id="intent" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-4 fw-bold shadow-sm">Execute Deep Analysis</button>
+            </form>
+
+            <div id="results" class="mt-5" style="display:none;">
+                <div class="alert alert-success text-center h4 fw-bold">Consensus Result: <span id="res-domain"></span></div>
+                <div id="res-list" class="list-group shadow"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 60-Question Professional Battery (10 per category)
+const questions = [
+    // Realistic
+    {c:'R', t:"Build a brick walkway?"}, {c:'R', t:"Repair household appliances?"}, {c:'R', t:"Operate a power saw?"}, {c:'R', t:"Assemble furniture?"}, {c:'R', t:"Install a flooring system?"}, {c:'R', t:"Work on a construction site?"}, {c:'R', t:"Fix a car engine?"}, {c:'R', t:"Maintain hardware systems?"}, {c:'R', t:"Use professional tools?"}, {c:'R', t:"Landscape a garden?"},
+    // Investigative
+    {c:'I', t:"Analyze chemical structures?"}, {c:'I', t:"Study a virus's behavior?"}, {c:'I', t:"Solve a mathematical proof?"}, {c:'I', t:"Research new energy sources?"}, {c:'I', t:"Study the ocean floor?"}, {c:'I', t:"Examine fossils?"}, {c:'I', t:"Develop a theory?"}, {c:'I', t:"Conduct lab experiments?"}, {c:'I', t:"Analyze data patterns?"}, {c:'I', t:"Research market trends?"},
+    // Artistic
+    {c:'A', t:"Design a magazine cover?"}, {c:'A', t:"Write a novel or story?"}, {c:'A', t:"Paint a portrait?"}, {c:'A', t:"Direct a short film?"}, {c:'A', t:"Compose digital music?"}, {c:'A', t:"Design a building's interior?"}, {c:'A', t:"Perform in a play?"}, {c:'A', t:"Create a brand identity?"}, {c:'A', t:"Animate a character?"}, {c:'A', t:"Sculpt a statue?"},
+    // Social
+    {c:'S', t:"Teach children to read?"}, {c:'S', t:"Give life advice?"}, {c:'S', t:"Help people with disabilities?"}, {c:'S', t:"Work as a nurse?"}, {c:'S', t:"Volunteer at a shelter?"}, {c:'S', t:"Train a new employee?"}, {c:'S', t:"Counsel a couple?"}, {c:'S', t:"Lead a support group?"}, {c:'S', t:"Teach a technical skill?"}, {c:'S', t:"Mediate a conflict?"},
+    // Enterprising
+    {c:'E', t:"Manage a large team?"}, {c:'E', t:"Pitch a business idea?"}, {c:'E', t:"Negotiate a contract?"}, {c:'E', t:"Start your own company?"}, {c:'E', t:"Lead a sales meeting?"}, {c:'E', t:"Campaign for a cause?"}, {c:'E', t:"Supervise a project?"}, {c:'E', t:"Buy and sell stocks?"}, {c:'E', t:"Manage a store?"}, {c:'E', t:"Speak at a conference?"},
+    // Conventional
+    {c:'C', t:"Organize office files?"}, {c:'C', t:"Review financial audits?"}, {c:'C', t:"Maintain data records?"}, {c:'C', t:"Develop office procedures?"}, {c:'C', t:"Inventory supply stocks?"}, {c:'C', t:"Type legal documents?"}, {c:'C', t:"Check numbers for accuracy?"}, {c:'C', t:"Manage a payroll?"}, {c:'C', t:"Sort company mail?"}, {c:'C', t:"Update a database?"}
+];
+
+const box = document.getElementById('quiz-box');
+questions.forEach((q, i) => {
+    box.innerHTML += `
+        <div class="q-card">
+            <span class="small fw-bold">${i+1}. ${q.t}</span>
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="q${i}" id="q${i}a" value="${q.c}:20" checked>
+                <label class="btn btn-outline-danger btn-sm" for="q${i}a">Dislike</label>
+                <input type="radio" class="btn-check" name="q${i}" id="q${i}b" value="${q.c}:60">
+                <label class="btn btn-outline-secondary btn-sm" for="q${i}b">Neutral</label>
+                <input type="radio" class="btn-check" name="q${i}" id="q${i}c" value="${q.c}:100">
+                <label class="btn btn-outline-success btn-sm" for="q${i}c">Like</label>
+            </div>
+        </div>`;
+});
+
+document.getElementById('ultraForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const totals = {R:0, I:0, A:0, S:0, E:0, C:0, count:{R:0, I:0, A:0, S:0, E:0, C:0}};
+
+    for (let i=0; i<60; i++) {
+        const [cat, score] = fd.get(`q${i}`).split(':');
+        totals[cat] += parseInt(score);
+        totals.count[cat]++;
+    }
+
+    const payload = {
+        Math_Score: document.getElementById('math').value,
+        Programming_Skill: document.getElementById('prog').value,
+        Interest_Desc: document.getElementById('intent').value,
+        R: totals.R/10, I: totals.I/10, A: totals.A/10, S: totals.S/10, E: totals.E/10, C: totals.C/10
+    };
+
+    const res = await fetch('/recommend', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    const result = await res.json();
+    document.getElementById('results').style.display='block';
+    document.getElementById('res-domain').innerText = result.domain;
+    document.getElementById('res-list').innerHTML = result.top_matches.map(m => `
+        <div class="list-group-item d-flex justify-content-between">
+            <span>${m.title}</span><span class="badge bg-primary pt-2">${m.match}% Match</span>
+        </div>`).join('');
+};
+</script>
+</body>
+</html>

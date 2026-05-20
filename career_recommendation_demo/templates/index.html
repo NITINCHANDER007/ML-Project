@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career AI — Your Future Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:    #0f0d1a;
+            --paper:  #faf8f3;
+            --gold:   #c9a84c;
+            --gold2:  #e8c97a;
+            --violet: #3d2f6e;
+            --muted:  #7a6e8a;
+            --error:  #c0392b;
+            --success:#1a6e4a;
+        }
+
+        body {
+            background: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            font-family: 'DM Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        /* ── Left panel ─────────────────────────────── */
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,168,76,.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(61,47,110,.5) 0%, transparent 55%);
+        }
+
+        .grid-lines {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(201,168,76,.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(201,168,76,.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        .brand {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,168,76,.12);
+            border: 1px solid rgba(201,168,76,.3);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gold2);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .brand h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+            color: var(--paper);
+            line-height: 1.08;
+            margin-bottom: 20px;
+        }
+
+        .brand h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .brand p {
+            font-size: 1.05rem;
+            color: rgba(250,248,243,.6);
+            max-width: 380px;
+            line-height: 1.7;
+            margin-bottom: 44px;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: .93rem;
+            color: rgba(250,248,243,.7);
+        }
+
+        .feature-list li::before {
+            content: '';
+            width: 20px; height: 20px;
+            background: rgba(201,168,76,.15);
+            border: 1px solid rgba(201,168,76,.35);
+            border-radius: 50%;
+            flex-shrink: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-size: 12px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .orb-1 { width: 300px; height: 300px; background: rgba(61,47,110,.6); bottom: -60px; left: -60px; }
+        .orb-2 { width: 200px; height: 200px; background: rgba(201,168,76,.15); top: 10%; right: 5%; }
+
+        /* ── Right panel ─────────────────────────────── */
+        .right-panel {
+            width: 480px;
+            background: var(--paper);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 52px;
+            position: relative;
+        }
+
+        .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--violet), var(--gold), var(--violet));
+        }
+
+        .form-header {
+            margin-bottom: 36px;
+        }
+
+        .form-header h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .form-header p {
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: 7px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 16px;
+            background: #fff;
+            border: 1.5px solid #e0dbd5;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .95rem;
+            color: var(--ink);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input:focus {
+            border-color: var(--violet);
+            box-shadow: 0 0 0 3px rgba(61,47,110,.1);
+        }
+
+        .main-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .97rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s, transform .1s;
+            margin-top: 6px;
+            letter-spacing: .02em;
+        }
+
+        .main-btn:hover { background: var(--violet); transform: translateY(-1px); }
+        .main-btn:active { transform: translateY(0); }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+        .divider::before, .divider::after {
+            content: ''; flex: 1; height: 1px; background: #e0dbd5;
+        }
+
+        .toggle-text {
+            text-align: center;
+            font-size: .88rem;
+            color: var(--muted);
+            margin-top: 20px;
+        }
+
+        .toggle-link {
+            color: var(--violet);
+            font-weight: 600;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 0;
+            margin-left: 4px;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .alert {
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: .88rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .alert.error   { background: #fde8e8; color: var(--error);   border: 1px solid #f5c6c6; display: block; }
+        .alert.success { background: #e6f4ee; color: var(--success); border: 1px solid #b7deca; display: block; }
+
+        #field-name { transition: all .3s; overflow: hidden; }
+
+        @media (max-width: 860px) {
+            .left-panel { display: none; }
+            .right-panel { width: 100%; padding: 40px 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Left Branding Panel ─────────────────────── -->
+<div class="left-panel">
+    <div class="grid-lines"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="brand">
+        <div class="brand-badge">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#c9a84c" opacity=".5"/><circle cx="5" cy="5" r="2" fill="#c9a84c"/></svg>
+            AI-Powered Guidance
+        </div>
+
+        <h1>Discover Your<br><em>Career Path</em></h1>
+
+        <p>Leverage machine learning and RIASEC analysis to uncover careers aligned with your unique skills and personality.</p>
+
+        <ul class="feature-list">
+            <li>Hybrid XGBoost + Neural Network engine</li>
+            <li>RIASEC personality mapping</li>
+            <li>Live O*NET career database matching</li>
+            <li>Semantic interest similarity scoring</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── Right Auth Panel ────────────────────────── -->
+<div class="right-panel">
+    <div class="form-header">
+        <h2 id="form-title">Create Account</h2>
+        <p id="form-subtitle">Start your AI-guided career journey today.</p>
+    </div>
+
+    <div class="alert" id="alert-box"></div>
+
+    <form id="auth-form" autocomplete="off">
+        <div class="field" id="field-name">
+            <label for="userName">Full Name</label>
+            <input type="text" id="userName" placeholder="Jane Doe" required>
+        </div>
+
+        <div class="field">
+            <label for="userEmail">Email Address</label>
+            <input type="email" id="userEmail" placeholder="jane@example.com" required>
+        </div>
+
+        <div class="field">
+            <label for="userPass">Password</label>
+            <input type="password" id="userPass" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="submit-btn" class="main-btn">Create Account</button>
+    </form>
+
+    <p class="toggle-text">
+        <span id="toggle-text-label">Already have an account?</span>
+        <button class="toggle-link" id="toggle-link">Login</button>
+    </p>
+</div>
+
+<script>
+    const form         = document.getElementById('auth-form');
+    const formTitle    = document.getElementById('form-title');
+    const formSubtitle = document.getElementById('form-subtitle');
+    const submitBtn    = document.getElementById('submit-btn');
+    const toggleLink   = document.getElementById('toggle-link');
+    const toggleLabel  = document.getElementById('toggle-text-label');
+    const fieldName    = document.getElementById('field-name');
+    const alertBox     = document.getElementById('alert-box');
+    let isLogin = false;
+
+    function showAlert(msg, type) {
+        alertBox.textContent = msg;
+        alertBox.className = `alert ${type}`;
+    }
+
+    toggleLink.addEventListener('click', () => {
+        isLogin = !isLogin;
+        alertBox.className = 'alert';
+
+        if (isLogin) {
+            formTitle.textContent    = 'Welcome Back';
+            formSubtitle.textContent = 'Log in to continue your career journey.';
+            submitBtn.textContent    = 'Login';
+            toggleLink.textContent   = 'Sign Up';
+            toggleLabel.textContent  = "Don't have an account?";
+            fieldName.style.maxHeight = '0';
+            fieldName.style.opacity   = '0';
+            fieldName.style.marginBottom = '0';
+            document.getElementById('userName').removeAttribute('required');
+        } else {
+            formTitle.textContent    = 'Create Account';
+            formSubtitle.textContent = 'Start your AI-guided career journey today.';
+            submitBtn.textContent    = 'Create Account';
+            toggleLink.textContent   = 'Login';
+            toggleLabel.textContent  = 'Already have an account?';
+            fieldName.style.maxHeight = '200px';
+            fieldName.style.opacity   = '1';
+            fieldName.style.marginBottom = '18px';
+            document.getElementById('userName').setAttribute('required', '');
+        }
+    });
+
+    // Initialise name field visible
+    fieldName.style.maxHeight   = '200px';
+    fieldName.style.opacity     = '1';
+    fieldName.style.marginBottom = '18px';
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.className = 'alert';
+
+        const body = {
+            email:    document.getElementById('userEmail').value.trim(),
+            password: document.getElementById('userPass').value
+        };
+        if (!isLogin) body.name = document.getElementById('userName').value.trim();
+
+        const endpoint = isLogin ? '/api/login' : '/api/signup';
+
+        try {
+            const res  = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                showAlert(data.error || 'Something went wrong.', 'error');
+            } else {
+                showAlert(data.message, 'success');
+                setTimeout(() => window.location.href = '/dashboard', 800);
+            }
+        } catch {
+            showAlert('Network error. Please try again.', 'error');
+        }
+    });
+</script>
+</body>
+</html>
